@@ -1,0 +1,38 @@
+{
+  "@context": "https://data.gov.dk/",
+  "@type": "Organisation",
+  "@id": "https://data.gov.dk/organisation/0B47D949-FFA8-48BA-9D26-92F7D441CB66",
+  "prefLabel": "Esbjerg Kommune",
+  "altLabel": null,
+  "description": null,
+  "authorityCode": null,
+  "municipalityCode": 369,
+  "regionCode": null,
+  "po-classification": "Kommune",
+  "actsThrough": 29189803,
+  "hasSubOrganization": [
+    {
+      "id": "http://data.gov.dk/organisation/3A0D62FE-41E5-4B3F-83F7-3816A012C6E8",
+      "prefLabel": "Esbjerg Kommunes Biblioteker"
+    }
+  ],
+  "contactpoint": [
+    {
+      "autoritativeClassificationRefencence": "*",
+      "hasContactChannel": [
+        {
+          "channeltype": "phone",
+          "channeladdress": 76161616
+        },
+        {
+          "type": "email",
+          "address": "raadhuset@esbjergkommune.dk"
+        },
+        {
+          "type": "web",
+          "address": "http://www.esbjergkommune.dk"
+        }
+      ]
+    }
+  ]
+}
