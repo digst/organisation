@@ -1,0 +1,45 @@
+{
+  "@context": {
+    "@vocab": "http://data.gov.dk/auth?",
+    "prefLabel": "http://www.w3.org/2004/02/skos/core",
+    "altLabel": "http://www.w3.org/2004/02/skos/core#",
+    "description": "http://purl.org/dc/terms/",
+    "authorityCode": "auth",
+    "municipalityCode": "auth",
+    "regionCode": "auth",
+    "po-classification": {
+      "@id": "spo:PublicOrganizationType",
+      "@type": "@id"
+    },
+    "actsThrough": {
+      "@id": "cvr:Virksomhed",
+      "@type": "@id"
+    },
+    "isSubOrganizationOf": {
+      "@id": "Organisation",
+      "@type": "@id"
+    },
+    "hasSubOrganization": {
+      "@id": "Organisation",
+      "@type": "@id"
+    },
+    "contactpoint": "http://schema.org/ContactPoint",
+    "autoritativeClassificationRefencence": "auth",
+    "hasContactChannel": "ContactChannel",
+    "channeltype": {
+      "type": "string",
+      "enum": [
+        "ContactAdrress",
+        "TelephoneNumber",
+        "ChatUrl",
+        "FaxNumber",
+        "Email",
+        "WebsiteAddress",
+        "DigitalPostContactPoint"
+      ]
+    },
+    "channeladress": "?",
+    "address": "dar:Adresse",
+    "hoursAvailable": "http://schema.org/OpeningHoursSpecifikation"
+  }
+}
