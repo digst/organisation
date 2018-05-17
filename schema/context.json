@@ -4,28 +4,28 @@
     "prefLabel": "http://www.w3.org/2004/02/skos/core",
     "altLabel": "http://www.w3.org/2004/02/skos/core#",
     "description": "http://purl.org/dc/terms/",
-    "authorityCode": "auth",
-    "municipalityCode": "auth",
-    "regionCode": "auth",
+    "authorityCode": "https://data.gov.dk/model/core/authority#",
+    "municipalityCode": "https://data.gov.dk/model/core/authority#",
+    "regionCode": "https://data.gov.dk/model/core/authority#",
     "po-classification": {
       "@id": "spo:PublicOrganizationType",
       "@type": "@id"
     },
     "actsThrough": {
-      "@id": "cvr:Virksomhed",
+      "@id": "https;//data.gov.dk/model/profile/cvr#",
       "@type": "@id"
     },
     "isSubOrganizationOf": {
-      "@id": "Organisation",
+      "@id": "http://data.gov.dk/auth#organisation",
       "@type": "@id"
     },
     "hasSubOrganization": {
-      "@id": "Organisation",
+      "@id": "http://data.gov.dk/auth#organisation",
       "@type": "@id"
     },
     "contactpoint": "http://schema.org/ContactPoint",
-    "autoritativeClassificationRefencence": "auth",
-    "hasContactChannel": "ContactChannel",
+    "autoritativeClassificationRefencence": "http://data.gov.dk/auth#",
+    "hasContactChannel": "http://data.gov.dk/auth#ContactChannel",
     "channeltype": {
       "type": "string",
       "enum": [
@@ -39,7 +39,8 @@
       ]
     },
     "channeladress": "?",
-    "address": "dar:Adresse",
+    "address": "http://data.gov.dk/model/profile/dar#",
     "hoursAvailable": "http://schema.org/OpeningHoursSpecifikation"
   }
 }
+
