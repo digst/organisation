@@ -1,0 +1,37 @@
+{
+	"@context": {
+		"@type": "https://www.w3.org/ns/org#Organisation",
+		"@language": "da",
+		"_id": "database id for document, se mapR, couchDb, ES",
+		"prefLabel": {
+			"@id": "http://www.w3.org/2004/02/skos/core#prefLabel",
+			"@type": "http://www.w3.org/2001/XMLSchema#String"
+		},
+		"prefLabel_en": {
+			"@id": "http://www.w3.org/2004/02/skos/core#prefLabel",
+			"@type": "http://www.w3.org/2001/XMLSchema#String",
+			"@language": "en"
+		},
+
+		"altLabel": "http://www.w3.org/2004/02/skos/core#altLabel",
+		"description": "http://purl.org/dc/terms/description",
+		"authorityCode": "https;//data.gov.dk/model/core/authority#authorityCode",
+		"municipalityCode": "https;//data.gov.dk/model/core/authority#municipalityCode",
+		"regionCode": "https://data.gov.dk/model/core/authority#regionCode",
+
+		"po-classification": {
+			"@id": "https://www.w3.org/ns/org#classification",
+			"@type": "spo:PublicOrganizationType"
+		},
+
+		"actsThrough": {
+			"@id": "https://data.gov.dk/model/core/authority#actsThrough",
+			"@type": "@id"
+		},
+
+		"hasSubOrganization": {
+			"@id": "https://www.w3.org/ns/org#hasSubOrganization",
+			"@type": "@id"
+		}
+	}
+}

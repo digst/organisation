@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="dk">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Mock-up af brug af Myndighedsregister</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <style>
+        .contact-wp {
+
+        }
+        .btn, .nav-tabs>li>a, .well {
+            border-radius: 2px!important;
+            -webkit-border-radius: 2px!important;
+            -moz-border-radius: 2px!important;
+            box-shadow: none;
+        }
+        .well {
+            background-color: #f5f5f5;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+        }
+        .well {
+            min-height: 20px;
+            padding: 19px;
+            margin-bottom: 20px;
+            border: 1px solid #e3e3e3;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+        }
+
+        article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
+            display: block;
+        }
+
+        article, aside, footer, header, hgroup, main, nav, section {
+            display: block;
+        }
+
+    </style>
+
+</head>
+
+<body class="bg-light">
+
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>Brug af myndighedsregister</h2>
+        <p class="lead">Denne side viser et eksempel på hvordan et myndighedsregister kan anvendes på borger.dk og Næste generation Digital Post via
+            en webservice på platformen hos Statens-it.</p>
+    </div>
+
+    <form id="read">
+        <div class="row">
+            <div class="col-sm-4">
+                <label for="municipality-select">Kommune</label>
+                <select class="custom-select" id="municipality-select" ></select>
+            </div>
+            <div class="col-sm-4">
+                <label for="others-select">Anden myndighed</label>
+                <select class="custom-select" id="others-select">
+                   </select>
+            </div>
+            <div class="col-sm-4">
+                <label for="search">Søgning</label>
+                <input type="text" class="form-control" id="search" placeholder="Søg efter...">
+                <!-- /api/organisation?autocomplete= -->
+            </div>
+        </div>
+    </form>
+
+    <hr/>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6" id="b_preview" vocab="http://schema.org/">
+                <h4>Borger.dk</h4>
+                <div>
+                    <label for="b_auth_sup"></label><span id="b_auth_sup"></span>
+                    <label for="b_auth_name"></label><b><span id="b_auth_name"></span></b><br>
+                    <label for="b_auth_cp"></label><span id="b_auth_cp"></span>
+                    <label for="b_auth_sub"></label><span id="b_auth_sub"></span>
+                </div>
+            </div>
+            <div class="col-sm-6" id="d_preview">
+                <h4>Digital Post</h4>
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12" id="result">
+                <pre id="madsh">Vælg ovenfor...</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="./js/jquery.query-object.js"></script>
+<script type="text/javascript">
+
+    $(function() {
+        $("#municipality-select").empty().append("<option value=\"0\">Vælg en kommune</option>")
+        $.get("http://localhost:8000/municipalities", function(data) {
+            jdata = $.parseJSON(data);
+            jdata.sort(compare);
+            $.each(jdata, function(i, org) {
+                $("#municipality-select").append(
+                    "<option value='"+org['@id'].split('/').pop()+"'>" + org.prefLabel + "</option>");
+            });
+        });
+        $("#others-select").empty().append("<option value=\"0\">Vælg en ikke-kommunal myndighed</option>")
+        $.get("http://localhost:8000/others", function(data) {
+            jdata = $.parseJSON(data);
+            jdata.sort(compare);
+            $.each(jdata, function(i, org) {
+                $("#others-select").append(
+                    "<option value='"+org['@id'].split('/').pop()+"'>" + org.prefLabel + "</option>");
+            });
+        });
+
+    });
+
+    $("#municipality-select" ).change(function() {
+        showOrg($("#municipality-select").val())
+        $("#others-select" ).val(0)
+    });
+
+    $("#others-select" ).change(function() {
+        showOrg($("#others-select").val())
+        $("#municipality-select" ).val(0)
+    });
+
+    function showOrg(id) {
+        $("#b_auth_sup").empty()
+        $("#b_auth_cp").empty()
+        $("#b_auth_sub").empty()
+
+        $.get("http://localhost:8000/org/"+id, function(data) {
+            org_show($.parseJSON(data))
+        });
+    }
+
+    function org_show(org) {
+
+      // borger.dk
+
+        // list of super-organisations
+        if (org["isSubOrganizationOf"]) {
+            showSuper(org)
+        }
+
+        $("#b_auth_name").html(org["prefLabel"])
+
+        // foreach contact point "*" first, rest by name and folding
+            // foreach channel, show icon and address (sorting?)
+        showContactPoints(org)
+
+
+
+        // list of sub-organisations
+        if (org["hasSubOrganization"]) {
+            showSubs(org)
+        }
+      // Digital Post
+        // name of authority
+
+        // find all DigitalPost-channels in org and sub-org
+
+
+        // show raw json
+        $("#madsh").html(JSON.stringify(org,null, '   '));
+
+
+    }
+
+    function showContactPoints(org) {
+        for(var i=0; i < org["contactpoint"].length; i++) {
+            $("#b_auth_cp").append("<div class='contactpoint'>Kontaktpunkt for " + org["contactpoint"][i]["autoritativeClassificationRefencence"] +"<br/>" );
+            for(var j=0; j < org["contactpoint"][i]["hasContactChannel"].length; j++) {
+                $("#b_auth_cp").append("<li>"+org["contactpoint"][i]["hasContactChannel"][j]["channeltype"]+" : "+org["contactpoint"][i]["hasContactChannel"][j]["channeladdress"]+"</li>");
+            }
+            $("#b_auth_cp").append("</div>");
+        }
+    }
+
+
+    function showSuper(org) {
+        $("#b_auth_sup").append("<li><a onclick='showOrg(\""+org["isSubOrganizationOf"][0]["id"]+"\")' href='#'>"+org["isSubOrganizationOf"][0]["prefLabel"]+"</a></li>");
+    }
+
+    function showSubs(org) {
+        for(var i=0; i < org["hasSubOrganization"].length; i++) {
+            $("#b_auth_sub").append("<li><a onclick='showOrg(\""+org["hasSubOrganization"][i]["id"]+"\")' href='#'>"+org["hasSubOrganization"][i]["prefLabel"]+"</a></li>");
+        }
+    }
+
+    function compare(a, b) {
+        // Use toUpperCase() to ignore character casing
+        var aname = a.prefLabel.toUpperCase();
+        var bname = b.prefLabel.toUpperCase();
+
+        var comparison = 0;
+        if (aname > bname) {
+            comparison = 1;
+        } else if (aname < bname) {
+            comparison = -1;
+        }
+        return comparison;
+    }
+
+
+
+
+</script>
+
+</body>
+</html>
