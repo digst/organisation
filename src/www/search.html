@@ -48,7 +48,7 @@
         var search=$('#search');
         var text=search.val();
         var feed ='{"suggest" : {"text" : "'+text+'","completion" : {"field" : "suggest","fuzzy" : {"fuzziness" : 2}}}}';
-        $.post( "http://localhost:9200/index/_suggest?pretty", feed, function( data ) {
+        $.post( "http://localhost:9200/index/org/_search?q=silke*", feed, function( data ) {
             //console.log (data['suggest'][0]['options']["0"]['text']);
             $.each(data['suggest'][0]['options'],
                 function(index, value){
@@ -63,3 +63,4 @@
     }
 </script>
 </html>
+

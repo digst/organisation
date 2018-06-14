@@ -71,9 +71,8 @@
                    </select>
             </div>
             <div class="col-sm-4">
-                <label for="search">Søgning</label>
-                <input type="text" class="form-control" id="search" placeholder="Søg efter...">
-                <!-- /api/organisation?autocomplete= -->
+                <label for="searcher">Søgning</label>
+                <input type="text" class="form-control" id="searcher" placeholder="Søg efter...">
             </div>
         </div>
     </form>
@@ -132,7 +131,6 @@
                     "<option value='"+org['@id'].split('/').pop()+"'>" + org.prefLabel + "</option>");
             });
         });
-
     });
 
     $("#municipality-select" ).change(function() {
@@ -144,6 +142,11 @@
         showOrg($("#others-select").val())
         $("#municipality-select" ).val(0)
     });
+
+    $("#searcher" ).change(function() {
+        search($("#searcher").val())
+    });
+
 
     function showOrg(id) {
         $("#b_auth_sup").empty()
@@ -185,7 +188,44 @@
         // show raw json
         $("#madsh").html(JSON.stringify(org,null, '   '));
 
+    }
 
+    $.postJSON = function(url, data, success, dataType) {
+        if (typeof data != 'string') {
+            data = JSON.stringify(data);
+        }
+        $.ajax({
+            url : url,
+            type: "post",
+            data: data,
+            dataType: dataType || "json",
+            contentType: "application/json",
+            success: success
+        });
+    }
+
+    function search(term) {
+        var feed ='{"_source": [ "prefLabel", "id", "po-classification" ], "size" : 10, "query": {"match_phrase_prefix" : {"prefLabel" : "'+term+'"}},"highlight" : {"fields" : {"prefLabel" : {}}}}';
+        alert(feed)
+        $.postJSON( "http://localhost:9200/index/org/_search", feed, function( data ) {
+            console.log (text);
+            //$.each(data['suggest'][0]['options'],
+            //    function(index, value){
+            //        results+=value.text;
+            //        results+='<br/>';
+            //    }
+            //);
+            $('#results').html(data);
+            results='';
+            if (focus==1) setTimeout(function(){getSuggest()}, 300);
+        });
+
+
+
+        $.get("http://localhost:9200/index/org/_search?q="+term+"*", function(data) {
+
+            $("#madsh").html("<pre>"+data+"</pre>");
+        });
     }
 
     function showContactPoints(org) {
